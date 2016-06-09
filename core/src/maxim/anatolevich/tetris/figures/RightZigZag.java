@@ -19,8 +19,8 @@ public class RightZigZag extends Figure {
             }
     };
 
-    public RightZigZag(int x, int y, int position){
-        super(x, y, position);
+    public RightZigZag(int x, int y, int position, Brilliant brilliant){
+        super(x, y, position, brilliant);
         STANDART_SCHEMES = RIGHT_ZIGZAG_SCHEMES;
         scheme = STANDART_SCHEMES[position];
     }

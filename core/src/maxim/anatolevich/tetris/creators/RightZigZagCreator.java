@@ -2,6 +2,7 @@ package maxim.anatolevich.tetris.creators;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import maxim.anatolevich.tetris.figures.Brilliant;
 import maxim.anatolevich.tetris.figures.Figure;
 import maxim.anatolevich.tetris.figures.RightZigZag;
 
@@ -10,7 +11,7 @@ import maxim.anatolevich.tetris.figures.RightZigZag;
  */
 public class RightZigZagCreator extends FigureCreator {
     @Override
-    public Figure createFigure(int x, int y) {
-        return new RightZigZag(x, y, MathUtils.random(RightZigZag.RIGHT_ZIGZAG_SCHEMES.length - 1));
+    public Figure createFigure(int x, int y, Brilliant brilliant) {
+        return new RightZigZag(x, y, MathUtils.random(RightZigZag.RIGHT_ZIGZAG_SCHEMES.length - 1), brilliant);
     }
 }

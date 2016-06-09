@@ -26,8 +26,8 @@ public class RightHorse extends Figure {
 
     };
 
-    public RightHorse(int x, int y, int position){
-        super(x, y, position);
+    public RightHorse(int x, int y, int position, Brilliant brilliant){
+        super(x, y, position, brilliant);
         STANDART_SCHEMES = RIGHT_HORSE_SCHEMES;
         scheme = STANDART_SCHEMES[position];
     }

@@ -2,6 +2,7 @@ package maxim.anatolevich.tetris.creators;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import maxim.anatolevich.tetris.figures.Brilliant;
 import maxim.anatolevich.tetris.figures.Figure;
 import maxim.anatolevich.tetris.figures.Square;
 
@@ -10,7 +11,7 @@ import maxim.anatolevich.tetris.figures.Square;
  */
 public class SquareCreator extends FigureCreator{
     @Override
-    public Figure createFigure(int x, int y) {
-        return new Square(x, y, MathUtils.random(Square.SQUARE_SCHEMES.length - 1));
+    public Figure createFigure(int x, int y, Brilliant brilliant) {
+        return new Square(x, y, MathUtils.random(Square.SQUARE_SCHEMES.length - 1), brilliant);
     }
 }

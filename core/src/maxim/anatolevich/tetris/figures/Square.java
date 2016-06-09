@@ -13,8 +13,8 @@ public class Square extends Figure {
             }
     };
 
-    public Square(int x, int y, int position){
-        super(x, y, position);
+    public Square(int x, int y, int position, Brilliant brilliant){
+        super(x, y, position, brilliant);
         STANDART_SCHEMES = SQUARE_SCHEMES;
         scheme = STANDART_SCHEMES[position];
     }

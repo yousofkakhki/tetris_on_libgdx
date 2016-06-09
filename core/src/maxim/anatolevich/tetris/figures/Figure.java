@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import maxim.anatolevich.tetris.GameField;
 import maxim.anatolevich.tetris.Tetris;
 
 /**
@@ -18,20 +19,15 @@ public abstract class Figure{
 
     public int[][][] STANDART_SCHEMES;
 
-    public static int VERTICAL = 0;
-    public static int HORIZONTAL = 1;
-    public static int DOWN = 2;
-    public static int UP = 4;
-    public static int LEFT = 8;
-    public static int RIGHT = 16;
     public static int BLOCK_SIZE = 20;
-
+    public Brilliant brilliant;
     public long lastMoveTime;
 
-    public Figure(int x, int y, int position){
+    public Figure(int x, int y, int position, Brilliant brilliant){
         this.x = x;
         this.y = y;
         this.position = position;
+        this.brilliant = brilliant;
         lastMoveTime = TimeUtils.nanoTime();
     }
 
@@ -42,11 +38,11 @@ public abstract class Figure{
         }
     }
 
-    public void draw(SpriteBatch batch, Texture texture){
+    public void draw(SpriteBatch batch){
         for(int j = 0; j < scheme.length; j++){
             for(int i = 0; i < scheme[0].length; i++){
                 if(scheme[j][i] == 1)
-                    batch.draw(texture, Tetris.xOffset + (x + i) * BLOCK_SIZE, Tetris.yOffset + (27 - (y + j)) * BLOCK_SIZE);
+                    batch.draw(brilliant.texture, Tetris.xOffset + (x + i) * BLOCK_SIZE, Tetris.yOffset + (27 - (y + j)) * BLOCK_SIZE);
             }
         }
     }
@@ -68,7 +64,7 @@ public abstract class Figure{
             y = 27 - scheme.length;
     }
 
-    public boolean stop(int[][] gameField){
+    public boolean stop(GameField gameField){
         if(y + scheme.length >= 27) {
             y--;
             return true;
@@ -76,7 +72,7 @@ public abstract class Figure{
         for(int i = 0; i < scheme.length; i++)
             for(int j = 0; j < scheme[0].length; j++)
                 if(scheme[i][j] == 1) {
-                    if (gameField[y + i][x + j] == 1) {
+                    if (gameField.field[y + i][x + j] != null) {
                         y--;
                         return true;
                     }

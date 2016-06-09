@@ -2,6 +2,7 @@ package maxim.anatolevich.tetris.creators;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import maxim.anatolevich.tetris.figures.Brilliant;
 import maxim.anatolevich.tetris.figures.Figure;
 import maxim.anatolevich.tetris.figures.LeftHorse;
 
@@ -10,7 +11,7 @@ import maxim.anatolevich.tetris.figures.LeftHorse;
  */
 public class LeftHorseCreator extends  FigureCreator {
     @Override
-    public Figure createFigure(int x, int y) {
-        return new LeftHorse(x, y, MathUtils.random(LeftHorse.LEFT_HORSE_SCHEMES.length - 1));
+    public Figure createFigure(int x, int y, Brilliant brilliant) {
+        return new LeftHorse(x, y, MathUtils.random(LeftHorse.LEFT_HORSE_SCHEMES.length - 1), brilliant);
     }
 }

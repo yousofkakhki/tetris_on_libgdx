@@ -20,6 +20,7 @@ import maxim.anatolevich.tetris.creators.LineCreator;
 import maxim.anatolevich.tetris.creators.RightHorseCreator;
 import maxim.anatolevich.tetris.creators.RightZigZagCreator;
 import maxim.anatolevich.tetris.creators.SquareCreator;
+import maxim.anatolevich.tetris.figures.Brilliant;
 import maxim.anatolevich.tetris.figures.Figure;
 import maxim.anatolevich.tetris.figures.Line;
 
@@ -30,29 +31,43 @@ public class Tetris extends ApplicationAdapter {
 	long moveInterval = 350000000;
 	Array<FigureCreator> figureCreatorList;
 	SpriteBatch batch;
-	Texture figureTexture;
+	Array<Texture> textureList;
 	Texture bg;
 	Figure activeFigure;
 	Figure nextFigure;
-	int[][] gameField;
+	GameField gameField;
 	int score;
 	Label scoreLabel;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		bg = new Texture("bg.jpg");
-		figureTexture = new Texture("yellow_brilliant.png");
+
+		textureList = new Array<Texture>();
+		textureList.add(new Texture("yellow_brilliant.png"));
+		textureList.add(new Texture("purple_brilliant.png"));
+		textureList.add(new Texture("blue_brilliant.png"));
+		textureList.add(new Texture("green_brilliant.png"));
+
 		formFigureCreatorList();
 		nextFigure = createFigure();
 		activeFigure = createFigure();
 		activeFigure.x = 6;
 		activeFigure.y = 0;
-		gameField = new int[28][15];
+		gameField = new GameField(this);
 
 		score = 0;
 		scoreLabel = new Label("Score:\n" + score, new Label.LabelStyle(new BitmapFont(true), Color.BLUE));
 		scoreLabel.setX(400);
 		scoreLabel.setY(270);
+	}
+
+	public void changeMoveInterval(){
+		moveInterval -= score;
+	}
+
+	public void changeScore(int dScore){
+		score += dScore;
 	}
 
 	private void formFigureCreatorList(){
@@ -73,7 +88,7 @@ public class Tetris extends ApplicationAdapter {
 		if(activeFigure.stop(gameField)){
 			nextFigure.x = 6;
 			nextFigure.y = 0;
-			printFigureOnGameField(activeFigure);
+			gameField.printFigureOnGameField(activeFigure);
 			activeFigure = nextFigure;
 			nextFigure = createFigure();
 		}
@@ -88,9 +103,9 @@ public class Tetris extends ApplicationAdapter {
 
 		batch.begin();
 			batch.draw(bg, 0, 0);
-			drawGameField();
-			activeFigure.draw(batch, figureTexture);
-			nextFigure.draw(batch, figureTexture);
+			gameField.drawGameField(batch);
+			activeFigure.draw(batch);
+			nextFigure.draw(batch);
 			scoreLabel.draw(batch, 1);
 		batch.end();
 
@@ -109,49 +124,12 @@ public class Tetris extends ApplicationAdapter {
 		if(endGame())
 			System.exit(0);
 
-		deleteFullLines();
-	}
-
-	public boolean isFullLine(int[][] gameField, int line){
-		for(int i = 0; i < gameField[0].length; i++)
-			if(gameField[line][i] == 0)
-				return false;
-		return true;
-	}
-
-	public void deleteLine(int line){
-		for(int i = line - 1; i >= 0; i--){
-			for(int j = 0; j < gameField[0].length; j++){
-				gameField[i + 1][j] = gameField[i][j];
-			}
-		}
-		for(int i = 0; i < gameField[0].length; i++)
-			gameField[0][i] = 0;
-	}
-
-	public void deleteFullLines(){
-		for(int i = gameField.length - 1; i >= 0; i--){
-			if(isFullLine(gameField, i)) {
-				deleteLine(i);
-				moveInterval -= score;
-				score += 100;
-			}
-		}
-	}
-
-	public void drawGameField(){
-		for(int i = 0; i < gameField.length; i++){
-			for(int j = 0; j < gameField[0].length; j++){
-				if(gameField[i][j] == 1) {
-					batch.draw(figureTexture, xOffset + j * Figure.BLOCK_SIZE, yOffset + (gameField.length - 1 - i) * Figure.BLOCK_SIZE);
-				}
-			}
-		}
+		gameField.deleteFullLines();
 	}
 
 	public boolean endGame(){
-		for(int i = 0; i < gameField[0].length; i++)
-			if(gameField[0][i] == 1)
+		for(int i = 0; i < gameField.field[0].length; i++)
+			if(gameField.field[0][i] != null)
 				return true;
 		return false;
 	}
@@ -159,16 +137,7 @@ public class Tetris extends ApplicationAdapter {
 	public Figure createFigure(){
 		int startX = 20;
 		int startY = 2;
-		return figureCreatorList.get(MathUtils.random(figureCreatorList.size - 1)).createFigure(startX, startY);
-	}
-
-	public void printFigureOnGameField(Figure figure){
-		for(int i = 0; i < figure.scheme.length; i++){
-			for(int j = 0; j < figure.scheme[0].length; j++){
-				if(figure.scheme[i][j] == 1){
-					gameField[figure.y + i][figure.x + j] = 1;
-				}
-			}
-		}
+		Brilliant brilliant = new Brilliant(textureList.get(MathUtils.random(textureList.size - 1)));
+		return figureCreatorList.get(MathUtils.random(figureCreatorList.size - 1)).createFigure(startX, startY, brilliant);
 	}
 }

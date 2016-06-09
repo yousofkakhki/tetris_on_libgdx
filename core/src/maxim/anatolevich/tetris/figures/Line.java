@@ -19,8 +19,8 @@ public class Line extends Figure{
         }
     };
 
-    public Line(int x, int y, int position){
-        super(x, y, position);
+    public Line(int x, int y, int position, Brilliant brilliant){
+        super(x, y, position, brilliant);
         STANDART_SCHEMES = LINE_SCHEMES;
         scheme = STANDART_SCHEMES[position];
     }
