@@ -37,7 +37,11 @@ public class Tetris extends ApplicationAdapter {
 	Figure nextFigure;
 	GameField gameField;
 	int score;
-	Label scoreLabel;
+
+
+	BitmapFont font;
+
+	//Label scoreLabel;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -57,9 +61,13 @@ public class Tetris extends ApplicationAdapter {
 		gameField = new GameField(this);
 
 		score = 0;
-		scoreLabel = new Label("Score:\n" + score, new Label.LabelStyle(new BitmapFont(true), Color.BLUE));
+		font = new BitmapFont();
+		font.setColor(1f, 1f, 1f, 1f);
+		/*
+		scoreLabel = new Label("Score:\n" + score, new Label.LabelStyle(new BitmapFont(true), Color.BROWN));
 		scoreLabel.setX(400);
 		scoreLabel.setY(270);
+		*/
 	}
 
 	public void changeMoveInterval(){
@@ -99,14 +107,17 @@ public class Tetris extends ApplicationAdapter {
 			}
 		}
 
-		scoreLabel.setText("Score:\n" + score);
+		//scoreLabel.setText("Score:\n" + score);
 
 		batch.begin();
 			batch.draw(bg, 0, 0);
 			gameField.drawGameField(batch);
 			activeFigure.draw(batch);
+			font.draw(batch, "Next figure ", 400, 590);
 			nextFigure.draw(batch);
-			scoreLabel.draw(batch, 1);
+			//scoreLabel.draw(batch, 1);
+
+			font.draw(batch, "Score: " + score, 400, 350);
 		batch.end();
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
