@@ -24,10 +24,14 @@ import maxim.anatolevich.tetris.figures.Figure;
 import maxim.anatolevich.tetris.figures.Line;
 
 public class Tetris extends ApplicationAdapter {
+	public static int xOffset = 25;
+	public static int yOffset = 40;
+
 	long moveInterval = 350000000;
 	Array<FigureCreator> figureCreatorList;
 	SpriteBatch batch;
 	Texture figureTexture;
+	Texture bg;
 	Figure activeFigure;
 	Figure nextFigure;
 	int[][] gameField;
@@ -36,13 +40,14 @@ public class Tetris extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		figureTexture = new Texture("circle.png");
+		bg = new Texture("bg.jpg");
+		figureTexture = new Texture("yellow_brilliant.png");
 		formFigureCreatorList();
 		nextFigure = createFigure();
 		activeFigure = createFigure();
 		activeFigure.x = 6;
 		activeFigure.y = 0;
-		gameField = new int[30][15];
+		gameField = new int[28][15];
 
 		score = 0;
 		scoreLabel = new Label("Score:\n" + score, new Label.LabelStyle(new BitmapFont(true), Color.BLUE));
@@ -62,14 +67,14 @@ public class Tetris extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 1, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if(activeFigure.stop(gameField)){
 			nextFigure.x = 6;
 			nextFigure.y = 0;
-			activeFigure = nextFigure;
 			printFigureOnGameField(activeFigure);
+			activeFigure = nextFigure;
 			nextFigure = createFigure();
 		}
 		else {
@@ -82,8 +87,9 @@ public class Tetris extends ApplicationAdapter {
 		scoreLabel.setText("Score:\n" + score);
 
 		batch.begin();
-		drawGameField();
-		activeFigure.draw(batch, figureTexture);
+			batch.draw(bg, 0, 0);
+			drawGameField();
+			activeFigure.draw(batch, figureTexture);
 			nextFigure.draw(batch, figureTexture);
 			scoreLabel.draw(batch, 1);
 		batch.end();
@@ -137,7 +143,7 @@ public class Tetris extends ApplicationAdapter {
 		for(int i = 0; i < gameField.length; i++){
 			for(int j = 0; j < gameField[0].length; j++){
 				if(gameField[i][j] == 1) {
-					batch.draw(figureTexture, j * Figure.BLOCK_SIZE, (29 - i) * Figure.BLOCK_SIZE);
+					batch.draw(figureTexture, xOffset + j * Figure.BLOCK_SIZE, yOffset + (gameField.length - 1 - i) * Figure.BLOCK_SIZE);
 				}
 			}
 		}

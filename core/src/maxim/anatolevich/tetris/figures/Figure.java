@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import maxim.anatolevich.tetris.Tetris;
+
 /**
  * Created by maxim_anatolevich on 06.06.2016.
  */
@@ -14,7 +16,7 @@ public abstract class Figure{
     public int x, y;
     public int[][] scheme;
 
-    public static int[][][] STANDART_SCHEMES;
+    public int[][][] STANDART_SCHEMES;
 
     public static int VERTICAL = 0;
     public static int HORIZONTAL = 1;
@@ -44,7 +46,7 @@ public abstract class Figure{
         for(int j = 0; j < scheme.length; j++){
             for(int i = 0; i < scheme[0].length; i++){
                 if(scheme[j][i] == 1)
-                    batch.draw(texture, (x + i) * BLOCK_SIZE, (29 - (y + j)) * BLOCK_SIZE);
+                    batch.draw(texture, Tetris.xOffset + (x + i) * BLOCK_SIZE, Tetris.yOffset + (27 - (y + j)) * BLOCK_SIZE);
             }
         }
     }
@@ -62,13 +64,15 @@ public abstract class Figure{
     }
 
     public void down(){
-        if ((++y + scheme.length) >= 29)
-            y = 29 - scheme.length;
+        if ((++y + scheme.length) >= 27)
+            y = 27 - scheme.length;
     }
 
     public boolean stop(int[][] gameField){
-        if(y + scheme.length == 29)
+        if(y + scheme.length >= 27) {
+            y--;
             return true;
+        }
         for(int i = 0; i < scheme.length; i++)
             for(int j = 0; j < scheme[0].length; j++)
                 if(scheme[i][j] == 1) {
